@@ -39,6 +39,6 @@ app.use("/recipe",require('./route/recipeRoute'))
 
 // Server
 const port = process.env.PORT || 1001
-app.listen(1001,()=>{
+app.listen(port,()=>{
     console.log("SERVER AT 1001");
 })
