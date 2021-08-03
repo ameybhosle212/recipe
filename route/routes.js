@@ -10,6 +10,10 @@ const Recipe = require('../model/recipe')
 require('../Auth/googleAuth')
 
 
+route.get("/",(req,res)=>{
+    res.render("index")
+})
+
 // LOGIN CREDENTIALS
 
 route.get("/login",(req,res)=>{
