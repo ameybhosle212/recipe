@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>HIIII</h1>
+    <h4><%= name %></h4>
+    <img src="/images/<%= image %>" alt="name">
+    <form action="/profile" method="post" enctype="multipart/form-data">
+        <input type="file" name="avatar" />
+        <button>Submit</button>
+    </form>
+    <% recipe.map( (data)=>{ %>
+        <a href="/recipe/view/<%= data.id%>">
+            <div class="assa">
+                <h1><%= data.title %></h1>
+                <h1><%= data.description %></h1>
+            </div>
+        </a>
+    <% }) %>
+</body>
+</html>
