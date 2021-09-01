@@ -24,12 +24,12 @@ route.post("/login", async (req,res)=>{
     const {name , password} = req.body;
     await User.findOne({name:name}).then(user =>{
         if(user){
-            const token = jwt.sign({user},'secret');
+            const token = jwt.sign({id:user._id},'secret');
             console.log(user._id);
             req.session.Userid = user._id;
             req.session.signed = true;
             res.cookie('user',token);
-            return res.json({"Data":user})
+            return res.redirect("/recipe/all");
         }else{
             return res.json({"DATA":"NOT VALID"})
         }
@@ -93,7 +93,7 @@ route.get('/google/callback',
 
 // LogOut 
 
-route.get("/logout", isSignedIn , isAuth,(req,res)=>{
+route.get("/logout", (req,res)=>{
     if(req.session.signed){
         req.session.destroy(function(err){
             res.clearCookie('user');

@@ -11,17 +11,31 @@ var upload = multer({ dest: 'uploads/' })
 // All 
 
 route.get("/all", isSignedIn , isAuth , async (req,res)=>{
-    const data = await Recipe.find({}).populate('user').sort([['Date',-1]])
-    console.log(data);
-    const data2 = [];
-    data.map((val)=>{
-        data2.push({
-            'id':val._id,
-            'title':val.title,
-            'Date':val.Date
+    try {
+        const values2 = await Recipe.find();
+        var len = Math.ceil((values2.length)/10);
+        let {page } = req.query;
+        if(!page){
+            page = 1
+        }
+        var size = 10;
+        const skip = (page - 1) * size;
+        const data = await Recipe.find({}).populate('user').sort([['Date',-1]]).limit(size).skip(skip)
+        // console.log(data);
+        const data2 = [];
+        data.map((val)=>{
+            data2.push({
+                'id':val._id,
+                'title':val.title,
+                'Date':val.Date,
+                'image':val.image
+            })
         })
-    })
-    res.render("Dashboard",{'Data':data});
+        console.log(data2);
+        res.render("Dashboard",{'Data':data2,'page':page,'len':len});
+    } catch (error) {
+        return res.json({"DATA":"SOMETHING WENT WRONG"})
+    }
 })
 
 // View 

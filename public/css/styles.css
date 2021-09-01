@@ -11,3 +11,17 @@
     background-color: aquamarine;
     border: 2px solid red;
 }
+
+html,body{
+    padding: 0px;
+    margin: 0px;
+}
+
+
+.space{
+    margin-left: 560px;
+}
+
+.space1{
+    margin-left: 20px;
+}
