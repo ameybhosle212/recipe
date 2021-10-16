@@ -8,7 +8,7 @@ const { isSignedIn, isAuth } = require('../Auth/auth')
 const jwt = require('jsonwebtoken')
 const Recipe = require('../model/recipe')
 require('../Auth/googleAuth')
-
+const bcrypt = require('bcryptjs')
 
 route.get("/",(req,res)=>{
     res.render("index")
@@ -22,16 +22,24 @@ route.get("/login",(req,res)=>{
 
 route.post("/login", async (req,res)=>{
     const {name , password} = req.body;
+    console.log(name);
+    console.log(password);
     await User.findOne({name:name}).then(user =>{
         if(user){
-            const token = jwt.sign({id:user._id},'secret');
-            console.log(user._id);
-            req.session.Userid = user._id;
-            req.session.signed = true;
-            res.cookie('user',token);
-            return res.redirect("/recipe/all");
+            var info = bcrypt.compare(password , user.password);
+            if(info){
+                const token = jwt.sign({id:user._id},'secret');
+                return res.json({'token':token})
+            }else{
+                return res.json({'msg':"Wrong Password"})
+            }
+            // console.log(user._id);
+            // req.session.Userid = user._id;
+            // req.session.signed = true;
+            // res.cookie('user',token);
+            // return res.json();
         }else{
-            return res.json({"DATA":"NOT VALID"})
+            return res.json({"msg":"Wrong Uname"})
         }
     })
 })

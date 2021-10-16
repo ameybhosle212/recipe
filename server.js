@@ -1,44 +1,23 @@
 const express = require('express')
 const app = express();
-const mongoose = require('mongoose')
-const passport = require('passport')
-const ExpressSession = require('express-session')
-const cors = require('cors')
-const Mongo = require('connect-mongo')
-const cookieParser = require('cookie-parser')
-require('dotenv').config()
+const mongoose = require('mongoose');
+const User = require('./model/user');
+const bcrypt = require('bcryptjs')
 
 // DATABASE
 
-mongoose.connect('mongodb+srv://amey:amey@cluster0.rkdnt.mongodb.net/myAttend?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
+mongoose.connect('mongodb+srv://amey:22334@cluster0.phmdq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
     console.log("DB");
 })
 
-// MiddleWare
-app.use(express.static(__dirname + '/public'));
-app.use(cors())
-app.use(ExpressSession({ 
-    secret: "secret",
-    resave:false,
-    saveUninitialized:false,
-    store:Mongo.create({
-        mongoUrl:'mongodb+srv://amey:amey@cluster0.rkdnt.mongodb.net/myAttend?retryWrites=true&w=majority'
+function add() {
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync("22334amey", salt);
+    var dtaa = new User({
+        name:"amey",
+        password:hash
     })
-}));
-app.use(cookieParser())
-app.use(passport.initialize())
-app.use(passport.session());
-app.set("view engine","ejs")
-app.use(express.urlencoded({extended:true}))
-app.use(express.json());
+    dtaa.save()
+}
 
-// Routes
-
-app.use("/",require('./route/routes'))
-app.use("/recipe",require('./route/recipeRoute'))
-
-// Server
-const port = process.env.PORT || 1001
-app.listen(port,()=>{
-    console.log("SERVER AT 1001");
-})
+add()

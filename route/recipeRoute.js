@@ -5,34 +5,43 @@ const { isSignedIn, isAuth } = require('../Auth/auth');
 const User = require('../model/user');
 const route = require('express').Router()
 var upload = multer({ dest: 'uploads/' })
+var jwt = require('jsonwebtoken')
 
 // CRUD recipe opeartions
 
 // All 
 
-route.get("/all", isSignedIn , isAuth , async (req,res)=>{
+
+ // this route returns profile along with data
+route.post("/all", async (req,res)=>{
     try {
-        const values2 = await Recipe.find();
-        var len = Math.ceil((values2.length)/10);
-        let {page } = req.query;
-        if(!page){
-            page = 1
-        }
-        var size = 10;
-        const skip = (page - 1) * size;
-        const data = await Recipe.find({}).populate('user').sort([['Date',-1]]).limit(size).skip(skip)
-        // console.log(data);
-        const data2 = [];
-        data.map((val)=>{
-            data2.push({
-                'id':val._id,
-                'title':val.title,
-                'Date':val.Date,
-                'image':val.image
+        var token = jwt.verify(req.body.token , 'secret')
+        if(token){
+            var userINfo = await User.findById(token).populate('Recipe');
+            const values2 = await Recipe.find();
+            var len = Math.ceil((values2.length)/10);
+            let {page } = req.query;
+            if(!page){
+                page = 1
+            }
+            var size = 10;
+            const skip = (page - 1) * size;
+            const data = await Recipe.find({}).populate('user').sort([['Date',-1]]).limit(size).skip(skip)
+            // console.log(data);
+            var data2 = [];
+            data.map((val)=>{
+                data2.push({
+                    'id':val._id,
+                    'title':val.title,
+                    'Date':val.Date,
+                    'image':val.image
+                })
             })
-        })
-        console.log(data2);
-        res.render("Dashboard",{'Data':data2,'page':page,'len':len});
+            console.log(data2);
+            return res.json({'userData':userINfo,'Data':data2,'page':page,'len':len});
+        }else{
+
+        }
     } catch (error) {
         return res.json({"DATA":"SOMETHING WENT WRONG"})
     }
