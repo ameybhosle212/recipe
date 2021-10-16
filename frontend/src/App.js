@@ -1,19 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
-import {Route  , Switch , BrowserRouter as Router } from 'react-router-dom'
-import PrivateRoute from './Component/PrivateRoute';
-import Login from './Component/Login';
-import Home from './Component/Home';
-import Dashboard from './Component/Dashboard';
+import { Switch , BrowserRouter as Router } from 'react-router-dom'
+import PrivateRoute from './Routes/PrivateRoute';
+import PublicRoute from './Routes/PublicRoute';
+import Login from './Components/Login';
+import Dashboard from './Components/Dashboard';
+import Profile from './Components/Profile';
+import OtherRecipes from './Components/OtherRecipes';
+
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login" exact component={Login} />
-        <Route path="/getAllData" exact component={Dashboard} />
-        
-        {/* <PrivateRoute path="/" exact component={Home} /> */}
+        <PrivateRoute exact path="/" component={Dashboard} />
+        <PublicRoute exact path="/login" component={Login} />
+        <PrivateRoute exact path="/profile" component={Profile} />
+        <PublicRoute exact path="/:profile/recipes" component={OtherRecipes} />
       </Switch>
     </Router>
   );
