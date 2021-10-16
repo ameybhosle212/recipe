@@ -12,7 +12,8 @@ var jwt = require('jsonwebtoken')
 // All 
 
 
- // this route returns profile along with data
+ // this route returns all Posts of Recipes according to Descending Order
+ 
 route.post("/all", async (req,res)=>{
     try {
         var token = jwt.verify(req.body.token , 'secret')
