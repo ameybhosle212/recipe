@@ -3,15 +3,20 @@ import React, { useEffect, useState } from "react";
 
 const Profile = ()=>{
     const [userData , setUserData] = useState({})
-    // useEffect(()=>{
-    //     var {data} = axios.post('http://localhost:4000/profile', {'token':localStorage.getItem('user')});
-    //     setUserData(data);
-    // },[])
+    useEffect(()=>{
+        async function Canv(){
+            var {data} = await axios.post('http://localhost:1001/profile', {'token':localStorage.getItem('user')});
+            console.log(data.Data);
+            setUserData(data.Data);
+            console.log(`The data is ${userData}`);
+        }
+        Canv()
+    },[])
     return (
         <div>
             <h1>BELOW IS THE DATA FOR YOUR PROFILE</h1>
-            {/* <h3>{data.name}</h3>
-            <p>{data.bio}</p> */}
+            <h3>{userData.name}</h3>
+            <p>{userData.password}</p>
         </div>
     );
 }

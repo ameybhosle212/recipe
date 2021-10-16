@@ -46,37 +46,46 @@ route.post("/login", async (req,res)=>{
 
 // Profile 
 
-route.get("/profile", isSignedIn , isAuth , async (req,res)=>{
-    const data = await User.findById(req.session.Userid);
-    console.log(data);
-    if(data){
-        var data2 = [];
-        const {_id , image , name } = data;
-        const recipes = await User.findById(req.session.Userid).populate('recipe');
-        console.log(recipes);
-        recipes.recipe.map((data)=>{
-            data2.push({
-                'id':data._id,
-                'date':data.Date,
-                'title':data.title,
-                'description':data.Description
-            });
-            console.log(data2);
-        })
-        res.render("profile",{'id':_id,'name':name,'image':image,'recipe':data2})
+route.post("/profile", async (req,res)=>{
+    var t = jwt.verify(req.body.token , 'secret')
+    console.log(t);
+    const UserIfValid = await User.findById(t.id).populate('recipe');
+    console.log(UserIfValid);
+    if(UserIfValid){
+        return res.json({'Data':UserIfValid})
     }else{
-        res.json({"DATA":"Something Went Wrong Please Reload the screen"})
+        return res.json({'msg':"Plaese Refresh The Page"})
     }
+    // const data = await User.findById(req.session.Userid);
+    // console.log(data);
+    // if(data){
+    //     var data2 = [];
+    //     const {_id , image , name } = data;
+    //     const recipes = await User.findById(req.session.Userid).populate('recipe');
+    //     console.log(recipes);
+    //     recipes.recipe.map((data)=>{
+    //         data2.push({
+    //             'id':data._id,
+    //             'date':data.Date,
+    //             'title':data.title,
+    //             'description':data.Description
+    //         });
+    //         console.log(data2);
+    //     })
+    //     return res.json({'id':_id,'name':name,'image':image,'recipe':data2})
+    // }else{
+    //     res.json({"DATA":"Something Went Wrong Please Reload the screen"})
+    // }
 })
 
-route.post("/profile", upload.single('avatar') , async (req,res)=>{
-    const user = await User.findById(req.session.Userid);
-    if(req.file){
-        const result = await uploadFile(req.file);
-        user.image = result.Key;
-        user.save();
-    }res.redirect("/profile")
-})
+// route.post("/profile", upload.single('avatar') , async (req,res)=>{
+//     const user = await User.findById(req.session.Userid);
+//     if(req.file){
+//         const result = await uploadFile(req.file);
+//         user.image = result.Key;
+//         user.save();
+//     }res.redirect("/profile")
+// })
 
 // Image Upload and Download
 
