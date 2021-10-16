@@ -10,7 +10,7 @@ require('dotenv').config()
 
 // DATABASE
 
-mongoose.connect('mongodb+srv://amey:amey@cluster0.rkdnt.mongodb.net/myAttend?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
+mongoose.connect('mongodb+srv://amey:22334@cluster0.phmdq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
     console.log("DB");
 })
 
@@ -22,7 +22,7 @@ app.use(ExpressSession({
     resave:false,
     saveUninitialized:false,
     store:Mongo.create({
-        mongoUrl:'mongodb+srv://amey:amey@cluster0.rkdnt.mongodb.net/myAttend?retryWrites=true&w=majority'
+        mongoUrl:'mongodb+srv://amey:22334@cluster0.phmdq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     })
 }));
 app.use(cookieParser())

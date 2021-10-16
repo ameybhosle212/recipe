@@ -1,16 +1,22 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-const Login = ()=>{
+const Login =  ()=>{
     const [email , setEmail] = useState("")
     const [pass , setPass] = useState("")
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault();
-        var {data} = axios.post("http://localhost:4000/login",{'email':email , 'pass':pass});
+        console.log(email);
+        var {data} = await axios.post("http://localhost:1001/login",{name :email , password:pass});
+        console.log(data);
         if(data){
             if(data.msg === "Wrong Password"){
                 alert("WRONG PASSWORD");
-            }else{
+            }
+            if(data.msg === "Wrong Uname"){
+                alert("Wrong Uname")
+            }
+            else{
                 localStorage.setItem('user',data.token);
                 window.location = "/";
             }
