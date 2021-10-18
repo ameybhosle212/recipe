@@ -17,8 +17,8 @@ var jwt = require('jsonwebtoken')
 route.post("/all", async (req,res)=>{
     try {
         var token = jwt.verify(req.body.token , 'secret')
-        if(token){
-            var userINfo = await User.findById(token).populate('Recipe');
+        console.log(token.id);
+        if(token.id){
             const values2 = await Recipe.find();
             var len = Math.ceil((values2.length)/10);
             let {page } = req.query;
@@ -35,11 +35,12 @@ route.post("/all", async (req,res)=>{
                     'id':val._id,
                     'title':val.title,
                     'Date':val.Date,
-                    'image':val.image
+                    'image':val.image,
+                    'username':val.user.name
                 })
             })
             console.log(data2);
-            return res.json({'userData':userINfo,'Data':data2,'page':page,'len':len});
+            return res.json({'Data':data2,'page':page,'len':len});
         }else{
 
         }
