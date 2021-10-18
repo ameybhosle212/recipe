@@ -17,6 +17,12 @@ const Profile = ()=>{
             <h1>BELOW IS THE DATA FOR YOUR PROFILE</h1>
             <h3>{userData.name}</h3>
             <p>{userData.password}</p>
+            {userData.recipe.map(data =>(
+                <div>
+                    <p>Title is {data.title}</p>
+                    <p>Description{data.Description}</p>
+                </div>
+            ))}
         </div>
     );
 }
