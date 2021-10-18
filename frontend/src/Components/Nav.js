@@ -13,6 +13,7 @@ const Navs = ()=>{
                 {/* <Link to="/profile"><li>Profile</li> </Link> */}
                 {isLogin() ? <Link to="/profile"><li>Profile</li> </Link> : <div></div> }
                 {isLogin() ? <div></div> : <Link to="/login"><li>Login</li> </Link>  }
+                {isLogin() ? <Link to="/logout"><li>Logout</li> </Link> : <div></div>  }
             </ul>
         </div>
     );
